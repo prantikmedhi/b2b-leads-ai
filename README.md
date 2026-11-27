@@ -9,7 +9,7 @@ Built with **Next.js 14**, **Tailwind CSS**, and **OpenAI/Llama**, this applicat
 
 ## 🌟 Key Features
 
-*   **🤖 AI-Powered Search**: Uses advanced LLMs (via OpenRouter) to understand natural language prompts like *"Find cafes in NYC that need a website"* or *"Digital marketing agencies in London"*.
+*   **🤖 AI-Powered Search**: Uses advanced LLMs (Groq as the primary provider, with automatic fallback to OpenRouter) to understand natural language prompts like *"Find cafes in NYC that need a website"* or *"Digital marketing agencies in London"*.
 *   **🎯 Smart Filtering**:
     *   **Website Development Mode**: Automatically filters out businesses that *already* have a website, giving you a list of high-potential prospects.
     *   **Broad Mode**: Finds all businesses in a category for digital marketing or general outreach, regardless of their website status.
@@ -23,7 +23,7 @@ Built with **Next.js 14**, **Tailwind CSS**, and **OpenAI/Llama**, this applicat
 
 *   **Frontend**: Next.js 14 (App Router), Tailwind CSS, React Icons
 *   **Backend**: Next.js API Routes (Serverless)
-*   **AI Logic**: OpenRouter API (using Meta Llama 3 models)
+*   **AI Logic**: Groq API (primary, Llama 3.3 70B by default) with OpenRouter as fallback
 *   **Data Source**: Serper.dev (Google Maps Search API)
 *   **Database/Export**: Google Sheets API
 *   **Deployment**: Vercel / Netlify
@@ -36,13 +36,13 @@ Before you begin, ensure you have the following installed:
 *   [Node.js](https://nodejs.org/) (v18 or higher)
 *   [Git](https://git-scm.com/)
 *   A Google Cloud Account
-*   Accounts for Serper.dev and OpenRouter
+*   Accounts for Serper.dev and Groq (OpenRouter optional, used as a fallback)
 
 ---
 
 ## 🔑 API Keys & Setup Guide
 
-To run this project, you need to obtain API keys from three services. Follow this step-by-step guide:
+To run this project, you need API keys from Serper.dev, at least one AI provider (Groq and/or OpenRouter), and Google Sheets. Follow this step-by-step guide:
 
 ### 1. Serper.dev (Google Maps Search)
 1.  Go to [Serper.dev](https://serper.dev/).
@@ -50,14 +50,21 @@ To run this project, you need to obtain API keys from three services. Follow thi
 3.  On the dashboard, locate your **API Key**.
 4.  Save this key; you will need it for `SERPER_API_KEY`.
 
-### 2. OpenRouter (AI Processing)
+### 2. Groq (AI Processing, primary)
+1.  Go to [console.groq.com/keys](https://console.groq.com/keys).
+2.  Sign up or log in, then click **Create API Key**.
+3.  Save this key; you will need it for `GROQ_API_KEY`.
+    *   *Note: The default model is `llama-3.3-70b-versatile`; override it with `GROQ_MODEL`.*
+
+### 3. OpenRouter (AI Processing, fallback)
+If a Groq request fails (or `GROQ_API_KEY` is not set), the app retries the request with OpenRouter when `OPENROUTER_API_KEY` is set.
 1.  Go to [OpenRouter.ai](https://openrouter.ai/).
 2.  Sign up or log in.
 3.  Navigate to **Keys** and create a new API Key.
 4.  Save this key; you will need it for `OPENROUTER_API_KEY`.
-    *   *Note: This project uses free models like Llama 3 by default, but you can configure it for others.*
+    *   *Note: This project uses free models like Llama 3 by default, but you can configure it for others with `OPENROUTER_MODEL`.*
 
-### 3. Google Sheets API (Data Export)
+### 4. Google Sheets API (Data Export)
 This is the most critical step. You need a Service Account to write data to your sheet.
 
 1.  **Create a Project**: Go to the [Google Cloud Console](https://console.cloud.google.com/) and create a new project.
@@ -118,7 +125,13 @@ This is the most critical step. You need a Service Account to write data to your
 
     # External APIs
     SERPER_API_KEY="your-serper-api-key"
+
+    # AI providers: Groq is primary, OpenRouter is the fallback (set at least one)
+    GROQ_API_KEY="your-groq-api-key"
     OPENROUTER_API_KEY="your-openrouter-api-key"
+    # Optional model overrides
+    # GROQ_MODEL="llama-3.3-70b-versatile"
+    # OPENROUTER_MODEL="openrouter/free"
     ```
     *Tip: If your private key contains `\n`, ensure they are properly formatted or pasted as a single line string depending on your OS/deployment environment.*
 
