@@ -54,7 +54,7 @@ To run this project, you need API keys from Serper.dev, at least one AI provider
 1.  Go to [console.groq.com/keys](https://console.groq.com/keys).
 2.  Sign up or log in, then click **Create API Key**.
 3.  Save this key; you will need it for `GROQ_API_KEY`.
-    *   *Note: The default model is `llama-3.3-70b-versatile`; override it with `GROQ_MODEL`.*
+    *   *Note: The default model is `openai/gpt-oss-120b`; override it with `GROQ_MODEL`.*
 
 ### 3. OpenRouter (AI Processing, fallback)
 If a Groq request fails (or `GROQ_API_KEY` is not set), the app retries the request with OpenRouter when `OPENROUTER_API_KEY` is set.
@@ -130,7 +130,7 @@ This is the most critical step. You need a Service Account to write data to your
     GROQ_API_KEY="your-groq-api-key"
     OPENROUTER_API_KEY="your-openrouter-api-key"
     # Optional model overrides
-    # GROQ_MODEL="llama-3.3-70b-versatile"
+    # GROQ_MODEL="openai/gpt-oss-120b"
     # OPENROUTER_MODEL="openrouter/free"
     ```
     *Tip: If your private key contains `\n`, ensure they are properly formatted or pasted as a single line string depending on your OS/deployment environment.*
